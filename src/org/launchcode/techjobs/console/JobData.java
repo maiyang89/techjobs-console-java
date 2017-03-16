@@ -3,6 +3,7 @@ package org.launchcode.techjobs.console;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -74,13 +75,15 @@ public class JobData {
 
             String aValue = row.get(column);
 
+            if (StringUtils.containsIgnoreCase(aValue,value)) {
+                jobs.add(row);
+            }
+
+            /*
             if (aValue.toLowerCase().contains(value.toLowerCase())) {
                 jobs.add(row);
             }
-        }
-
-        if (jobs.isEmpty()) {
-            System.out.println("No Results");
+            */
         }
 
         return jobs;
@@ -106,17 +109,24 @@ public class JobData {
 
         for (HashMap<String, String> row : allJobs) {
 
-            for (Map.Entry<String, String> i : row.entrySet()) {
-
-                if (i.getValue().toLowerCase().contains(value.toLowerCase()) && !jobs.contains(row)) {
+            for (String i : row.values()) {
+                if (StringUtils.containsIgnoreCase(i,value) && !jobs.contains(row)) {
                     jobs.add(row);
+                    break;
                 }
             }
 
-        }
+            /*
+            for (Map.Entry<String, String> i : row.entrySet()) {
 
-        if (jobs.isEmpty()) {
-            System.out.println("No Results");
+                if (StringUtils.containsIgnoreCase(i.getValue(),value) && !jobs.contains(row)) {
+                    jobs.add(row);
+                    break;
+                }
+
+            }
+            */
+
         }
 
         return jobs;
